@@ -133,8 +133,8 @@ def precedence_graph(data_set):
             args='-Grankdir=LR'
         ),ax=ax)
     
-#     plt.draw()
-#     plt.show()
+    # plt.draw()
+    # plt.show()
     return g
 
 
@@ -714,9 +714,9 @@ def plot_simulation(env, unique_tasks, feasable_solution):
 # Create the Main Assembly Line Class Environment for Simulation
 
 class g:
-    warmup_time = 1
-    sim_time = 120
-    bundle_size = 200
+    warmup_time = 5
+    sim_time = 60
+    bundle_size = 120
     finished_RM = pd.DataFrame(columns=['Process', 'Resource_Id', 'Finished_RM'])
     proc_wait_plot_data = pd.DataFrame(columns=['Process', 'Workstation', 'Wait_Time'])
     que_plot_data = pd.DataFrame(columns=['Process', 'Workstation', 'Que'])
@@ -944,6 +944,7 @@ class ClockAndData:
             process = g.proc_wait_plot_data[g.proc_wait_plot_data['Workstation'] == i +1]['Process']
             try:
                 waiting = g.proc_wait_plot_data[g.proc_wait_plot_data['Workstation'] == i +1]['Wait_Time']
+                # print(waiting)
             except:
                 waiting = [0]
             x_lab = list(map(str,process))      
