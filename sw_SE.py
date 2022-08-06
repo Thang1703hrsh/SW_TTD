@@ -20,34 +20,37 @@ uploaded_file = st.sidebar.file_uploader(label = "Upload your CSV or Excel file.
 
 global df 
 if uploaded_file is not None: 
-    df = pd.read_excel(uploaded_file, sheet_name='hat5',skiprows=3,usecols='B:G' , nrows= 100)
+    df = pd.read_excel(uploaded_file, sheet_name='hat4',skiprows=3,usecols='B:G' , nrows= 100)
     df['Precedence'] = df['Precedence'].astype(str)
-
+    df['Task Description'] = df['Task Description'].astype(str)
+    df['Resource'] = df['Resource'].astype(str)
 # Get Input Numbers for Line Balancing and Simulation
 # Lấy số liệu cân bằng và mô phỏng
-input_data = pd.read_excel(uploaded_file, sheet_name='Input_Data_5',skiprows=3,usecols='B:C')
+
+input_data = pd.read_excel(uploaded_file, sheet_name='Input_Data_4',skiprows=3,usecols='B:C')
 cycle_time = input_data[input_data['Particulars'] == 'Cycle Time (Max of Takt Time Vs Bottleneck)']['Input'].tolist()[0]
 workstations = input_data[input_data['Particulars'] == 'Max Number of Workstations']['Input'].tolist()[0]
 takt_time = input_data[input_data['Particulars'] == 'Takt Time Desired in Minutes']['Input'].tolist()[0]
 style_name = input_data[input_data['Particulars'] == 'Style Name']['Input'].tolist()[0]
 
 st.title("Data visualization")
-st.dataframe(df)
+st.table(df)
 
 # Plot dataframe 
-fig = px.line(df, x ='Task Number' , y ='ST (Minutes)', text = "ST (Minutes)" , title= "Data visualization" , width=1300, height= 800)
+fig = px.line(df, x ='Task Number' , y ='ST (Minutes)', text = "ST (Minutes)" , title= "Data visualization" , height= 800)
 fig.add_scatter(x=df['Task Number'], y= [cycle_time]*len(df['Task Number']) , name = "Cycle time max") 
 fig.update_traces(textposition="bottom right")
-st.plotly_chart(fig)
+st.plotly_chart(fig , use_container_width=True)
 
 
-# # Plot dataframe 
-# fig = px.bar(df, x ='Task Description' , y ='ST (Minutes)', width=1300, height= 800)
-# fig.update_traces(textposition="auto")
-# st.plotly_chart(fig)
+# Plot dataframe 
+fig = px.bar(df, x ='Task Description' , y ='ST (Minutes)', height= 800)
+
+fig.update_traces(textposition="auto")
+st.plotly_chart(fig , use_container_width=True)
 
 
-# # Plot dataframe 
+# Plot dataframe 
 # fig = px.line(df, x ='Task Number' , y ='No of Operators', text = "No of Operators" , width=1300, height= 800)
 # fig.update_traces(textposition="bottom right")
 
@@ -120,7 +123,7 @@ node_colors = node_colors['Hex'].to_dict()
 # Hàm cân bằng
 
 def import_data(file_path):
-    df = pd.read_excel(file_path,sheet_name='hat5',skiprows=3,usecols='B:G')
+    df = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:G')
 
     # Manipulate the Line Details data to split multiple Predecessors to individual rows
     temp = pd.DataFrame(columns=['Task Number', 'Precedence'])
@@ -316,7 +319,7 @@ def rgb2hex(r,g,b):
 def generate_assembly_line(file_path, env, feasable_solution, Workstation, que, switch):
     
     workstation_data = dict(tuple(feasable_solution.groupby('Workstation')))
-    base = pd.read_excel(file_path,sheet_name='hat5',skiprows=3,usecols='B:G')
+    base = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:G')
     
     assembly_line = []
     tasks = {}
@@ -776,7 +779,7 @@ class Assembly_Line:
         self.feasable_solution = feasable_solution
         self.Workstation = Workstation
         self.data = data
-        self.file = pd.read_excel(file_path,sheet_name='hat5',skiprows=3,usecols='B:F')
+        self.file = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:F')
         self.unique_task = self.file['Task Number'].tolist()
         self.followers = self.data.groupby(['Next Task'])['Task Number'].count().to_dict()
         
@@ -876,6 +879,30 @@ from PIL import Image
 image = Image.open('Allocated_Ws_hat.png')
 new_image = image.resize((1400, 600))
 st.image(new_image)  
+
+sumindex = []
+for i in range(1 , max(solution['Workstation'])+1):
+    sumindex.append(sum(solution[solution['Workstation'] == i]["ST (Minutes)"]))
+wks = np.unique(solution['Workstation']).tolist()
+
+df_new = pd.DataFrame(data = {'Work' : wks , 'SumST': sumindex})
+# Plot dataframe 
+fig = px.line(df_new , x = 'Work' , y = 'SumST', text = "SumST" , title= "Data visualization" , width=1300, height= 800)
+fig.add_scatter(x= df_new['Work'], y= [cycle_time]*len(df['Task Number']) , name = "Cycle time max") 
+fig.update_traces(textposition="bottom right")
+st.plotly_chart(fig)
+
+
+sumindex = []
+for i in range(1 , max(solution['Workstation'])+1):
+    sumindex.append(cycle_time - sum(solution[solution['Workstation'] == i]["ST (Minutes)"]))
+wks = np.unique(solution['Workstation']).tolist()
+
+df_new = pd.DataFrame(data = {'Work' : wks , 'SumST': sumindex})
+# Plot dataframe 
+fig = px.line(df_new , x = 'Work' , y = 'SumST', text = "SumST" , title= "Data visualization" , width=1300, height= 800)
+fig.update_traces(textposition="bottom right")
+st.plotly_chart(fig)
 
 
 
@@ -1177,8 +1204,6 @@ for ax in range(len(f.get_axes())):
         
 f.suptitle('PRODUCTION',fontsize=10)
 data_plot = FigureCanvasTkAgg(f, master=TAB1)
-data_plot.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        
 
 f_1 = plt.figure()
 gs_1 = GridSpec(1,solution_workstations,figure=f_1)

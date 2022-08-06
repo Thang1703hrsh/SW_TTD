@@ -193,12 +193,13 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
     for i in range(1,workstations + 1):
         stations[i] = 'open'
     
+    # i là index, d là data trong mỗi hàng
     for i, d in allocation_table.iterrows():
         
         if d[1] != 'START':
             
-            current_task = d[0]
-            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0]
+            current_task = d[0] #Task hiện hành
+            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #
             current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0]
             previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist()
             previous_task_list = []
@@ -836,7 +837,6 @@ def save_graph(data_set,workstation, shades):
     
 save_graph(solution,workstations,node_colors)    
 
-
 # In[19]:
 
 
@@ -1105,7 +1105,7 @@ TAB4 = ttk.Frame(TAB_CONTROL)
 TAB_CONTROL.add(TAB4, text='Components Que Time')
 TAB_CONTROL.pack(expand=1, fill="both")
 
-
+################################1####################################
 f = plt.figure()
 gs = GridSpec(1,solution_workstations,figure=f)
 gs.update(left=0.025,right=0.99,top=0.8,bottom=0.1,wspace=0.2,hspace=0.01)
@@ -1129,7 +1129,7 @@ f.suptitle('PRODUCTION',fontsize=10)
 data_plot = FigureCanvasTkAgg(f, master=TAB1)
 data_plot.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
-
+################################2####################################
 f_1 = plt.figure()
 gs_1 = GridSpec(1,solution_workstations,figure=f_1)
 gs_1.update(left=0.025,right=0.99,top=0.8,bottom=0.1,wspace=0.2,hspace=0.01)
@@ -1138,9 +1138,9 @@ subplot_dict_q = {}
 
 for col in range(solution_workstations):
     if 'a' + str(col) == 'a0':
-        subplot_dict_q['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)))
+        subplot_dict_q['a' + str(col)] = plt.subplot(gs_1.new_subplotspec((0,col)))
     else:
-        subplot_dict_q['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)),sharey = subplot_dict_q['a0'])
+        subplot_dict_q['a' + str(col)] = plt.subplot(gs_1.new_subplotspec((0,col)),sharey = subplot_dict_q['a0'])
 
 
 for ax in range(len(f_1.get_axes())):
@@ -1153,7 +1153,8 @@ f_1.suptitle('LEAD TIME',fontsize=10)
 data_plot_1 = FigureCanvasTkAgg(f_1, master=TAB2)
 data_plot_1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     
-    
+################################3####################################
+   
 f_2 = plt.figure()
 gs_2 = GridSpec(1,solution_workstations,figure=f_2)
 gs_2.update(left=0.025,right=0.99,top=0.8,bottom=0.1,wspace=0.2,hspace=0.01)
@@ -1162,9 +1163,9 @@ subplot_dict_w = {}
 
 for col in range(solution_workstations):
     if 'a' + str(col) == 'a0':
-        subplot_dict_w['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)))
+        subplot_dict_w['a' + str(col)] = plt.subplot(gs_2.new_subplotspec((0,col)))
     else:
-        subplot_dict_w['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)),sharey = subplot_dict_w['a0'])
+        subplot_dict_w['a' + str(col)] = plt.subplot(gs_2.new_subplotspec((0,col)),sharey = subplot_dict_w['a0'])
 
 
 for ax in range(len(f_2.get_axes())):
@@ -1177,7 +1178,8 @@ f_2.suptitle('IDLE TIME',fontsize=10)
 data_plot_2 = FigureCanvasTkAgg(f_2, master=TAB3)
 data_plot_2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     
-    
+################################4####################################
+
 f_3 = plt.figure()
 gs_3 = GridSpec(1,solution_workstations,figure=f_3)
 gs_3.update(left=0.025,right=0.99,top=0.8,bottom=0.1,wspace=0.2,hspace=0.01)
@@ -1186,9 +1188,9 @@ subplot_dict_wip = {}
 
 for col in range(solution_workstations):
     if 'a' + str(col) == 'a0':
-        subplot_dict_wip['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)))
+        subplot_dict_wip['a' + str(col)] = plt.subplot(gs_3.new_subplotspec((0,col)))
     else:
-        subplot_dict_wip['a' + str(col)] = plt.subplot(gs.new_subplotspec((0,col)),sharey = subplot_dict_wip['a0'])
+        subplot_dict_wip['a' + str(col)] = plt.subplot(gs_3.new_subplotspec((0,col)),sharey = subplot_dict_wip['a0'])
 
 
 for ax in range(len(f_3.get_axes())):
