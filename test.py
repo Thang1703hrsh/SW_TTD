@@ -63,15 +63,12 @@ node_colors = node_colors['Hex'].to_dict()
 
 # Get Input Numbers for Line Balancing and Simulation
 # Lấy số liệu cân bằng và mô phỏng
-input_data = pd.read_excel(file_path, sheet_name='Input_Data_4',skiprows=3,usecols='B:C')
-cycle_time = input_data[input_data['Particulars'] == 'Cycle Time (Max of Takt Time Vs Bottleneck)']['Input'].tolist()[0]
-workstations = input_data[input_data['Particulars'] == 'Max Number of Workstations']['Input'].tolist()[0]
-takt_time = input_data[input_data['Particulars'] == 'Takt Time Desired in Minutes']['Input'].tolist()[0]
-style_name = input_data[input_data['Particulars'] == 'Style Name']['Input'].tolist()[0]
 
+input_data = pd.read_excel(file_path, sheet_name='hat4',skiprows=3,usecols='B:F')
+cycle_time = max(input_data['ST (Minutes)'])
+workstations = (input_data['ST (Minutes)']).count()
 
 # In[3]:
-
 
 # Functions for Line Balancing
 # Hàm cân bằng
@@ -185,6 +182,7 @@ def create_LB_Table(data_set,g):
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
     
     counter = [0] * workstations
+    
     current_station = 1
     
     stations = {}
@@ -192,52 +190,63 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
     for i in range(1,workstations + 1):
         stations[i] = 'open'
     
+    count_station = 0
     # i là index, d là data trong mỗi hàng
     for i, d in allocation_table.iterrows():
         if d[1] != 'START':
+            
             current_task = d[0] #Task hiện hành
             
-            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #Yes No hiện hành
+            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #
+
+            current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0]
             
-            current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0] #Thời gian hiện hành
-            previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist() # Task trước đấy
+            previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist()
 
             previous_task_list = []
+            
             previous_stations_list = []
             for pt in previous_task:
-                previous_task_list.append(allocation_table[allocation_table['Task Number']==pt].Allocated.tolist()[0]) 
+                previous_task_list.append(allocation_table[allocation_table['Task Number']==pt].Allocated.tolist()[0])
                 previous_stations_list.append(allocation_table[allocation_table['Task Number']==pt].Workstation.tolist()[0])
 
-            count_allocations = sum(map(lambda x : x=='Yes',previous_task_list))
+            count_allocations = sum(map(lambda x : x=='Yes',previous_task_list)) # Tính số lượng các task trước đó
             len_allocations = len(previous_task_list)
 
             if count_allocations == len_allocations:
                 previous_task_allocated = 'Yes'
             else:
                 previous_task_allocated = 'No'
-            
+
             station_cut_off = max(previous_stations_list)
-            if (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[station_cut_off-1])):
+
+            if (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[station_cut_off-1])) & (count_station <= 2):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = station_cut_off
                 counter[station_cut_off-1]+=current_task_time
-                
-            elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[current_station-1])):
+                count_station += 1
+
+            elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[current_station-1])) & (count_station <= 2):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = current_station
-                counter[current_station-1]+=current_task_time    
+                counter[current_station-1]+=current_task_time  
+                count_station += 1  
                 
             elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No'):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = current_station + 1
                 current_station+=1
                 counter[current_station-1]+=current_task_time 
-                
+                count_station += 1
+                count_station = 0
+                count_station+=1
+
             else:
                 allocation_table.iloc[i,6] = 'Yes'
                 allocated_station = allocation_table[allocation_table['Task Number'] == current_task]['Workstation'].tolist()[0]
                 allocation_table.iloc[i,5] = allocated_station
                 allocation_table.iloc[i,4] = 0
+            
     
     #reassign the starting workstations from 1 to respective workstations
     # Phân bổ các máy trạm từ 1 đến máy trạm tương ứng
@@ -250,17 +259,8 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
         
     return allocation_table            
 
-
-# Create the Main Assembly Line Class Environment for Simulation
-
-# In[15]:
-
-
-# Perform Line Balancing
 data = import_data(file_path)
 graph = precedence_graph(data)
 Line_Balance = create_LB_Table(data,graph)
-Line_Balance.to_csv('Line_Balance.csv',index=False)
 solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations)
-solution.to_csv('Feasable_Solution.csv',index=False)
-solution_workstations = max(solution['Workstation'].tolist())
+print(solution)

@@ -63,15 +63,12 @@ node_colors = node_colors['Hex'].to_dict()
 
 # Get Input Numbers for Line Balancing and Simulation
 # Lấy số liệu cân bằng và mô phỏng
-input_data = pd.read_excel(file_path, sheet_name='Input_Data_4',skiprows=3,usecols='B:C')
-cycle_time = input_data[input_data['Particulars'] == 'Cycle Time (Max of Takt Time Vs Bottleneck)']['Input'].tolist()[0]
-workstations = input_data[input_data['Particulars'] == 'Max Number of Workstations']['Input'].tolist()[0]
-takt_time = input_data[input_data['Particulars'] == 'Takt Time Desired in Minutes']['Input'].tolist()[0]
-style_name = input_data[input_data['Particulars'] == 'Style Name']['Input'].tolist()[0]
 
+input_data = pd.read_excel(file_path, sheet_name='hat4',skiprows=3,usecols='B:F')
+cycle_time = max(input_data['ST (Minutes)'])
+workstations = (input_data['ST (Minutes)']).count()
 
 # In[3]:
-
 
 # Functions for Line Balancing
 # Hàm cân bằng
@@ -193,80 +190,80 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
     for i in range(1,workstations + 1):
         stations[i] = 'open'
     
+    count_station = 0
+
+    print('Enter your max workstation:')
+    max_station = int(input())
+
     # i là index, d là data trong mỗi hàng
     for i, d in allocation_table.iterrows():
-        
         if d[1] != 'START':
             
             current_task = d[0] #Task hiện hành
+            
             current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #
+
             current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0]
+            
             previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist()
+
             previous_task_list = []
+            
             previous_stations_list = []
             for pt in previous_task:
                 previous_task_list.append(allocation_table[allocation_table['Task Number']==pt].Allocated.tolist()[0])
                 previous_stations_list.append(allocation_table[allocation_table['Task Number']==pt].Workstation.tolist()[0])
 
-            count_allocations = sum(map(lambda x : x=='Yes',previous_task_list))
+            count_allocations = sum(map(lambda x : x=='Yes',previous_task_list)) # Tính số lượng các task trước đó
             len_allocations = len(previous_task_list)
-            
+
             if count_allocations == len_allocations:
                 previous_task_allocated = 'Yes'
             else:
                 previous_task_allocated = 'No'
-            
+
             station_cut_off = max(previous_stations_list)
 
-        
-            if (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[station_cut_off-1])):
+            if (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[station_cut_off-1])) & (count_station < max_station):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = station_cut_off
                 counter[station_cut_off-1]+=current_task_time
-                
-            elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[current_station-1])):
+                count_station += 1
+
+            elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[current_station-1])) & (count_station < max_station):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = current_station
-                counter[current_station-1]+=current_task_time    
+                counter[current_station-1]+=current_task_time  
+                count_station += 1  
                 
             elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No'):
                 allocation_table.iloc[i,6] = 'Yes'
                 allocation_table.iloc[i,5] = current_station + 1
                 current_station+=1
                 counter[current_station-1]+=current_task_time 
-                
+                count_station += 1
+                count_station = 0
+                count_station += 1
+
             else:
                 allocation_table.iloc[i,6] = 'Yes'
                 allocated_station = allocation_table[allocation_table['Task Number'] == current_task]['Workstation'].tolist()[0]
                 allocation_table.iloc[i,5] = allocated_station
                 allocation_table.iloc[i,4] = 0
+                count_station+=1
+
+            
     
     #reassign the starting workstations from 1 to respective workstations
     # Phân bổ các máy trạm từ 1 đến máy trạm tương ứng
     reassign = allocation_table[allocation_table['Task Description'] == 'START']['Task Number'].tolist()
-
-
-    #########################################################
-    # Checkkkk
-    #########################################################
-
-    next_task = allocation_table[allocation_table['Task Number'] == 'S_1']['Next Task'].tolist()[0]
-    print(reassign)
-    print(allocation_table[allocation_table['Task Number'] == next_task]['Workstation'].tolist()[0])
-
-    #########################################################
-    # Checkkkk
-    #########################################################
-
-
-
 
     for start in reassign:
         next_task = allocation_table[allocation_table['Task Number'] == start]['Next Task'].tolist()[0]
         next_task_station = allocation_table[allocation_table['Task Number'] == next_task]['Workstation'].tolist()[0]
         allocation_table.loc[allocation_table['Task Number'] == start,'Workstation'] = next_task_station
         
-    return allocation_table            
+    return allocation_table                            
 
 
 # In[7]:
@@ -501,7 +498,7 @@ class Workstation:
             counter+=1
             if counter == g.bundle_size + 1:
                 break
-                
+            
             yield self.env.timeout(0)   
 #             yield self.env.timeout(self.cycle_time_wait - task_time)       
             
@@ -731,7 +728,6 @@ class g:
     wip_data = pd.DataFrame(columns=['Process', 'Counter', 'Resource_Number', 'Enter_Time','Exit_Time','Que_Time'])
     
     cycle_data = pd.DataFrame(columns=['Time', 'CT'])
-    takt = takt_time
 
 class Assembly_Line:
     
@@ -804,6 +800,7 @@ def get_simulation_time(sim_min):
 
 
 # Draw the Assembly Line with Color Mapping as per Workstations and Save Output
+import matplotlib.animation as animation
 
 def save_graph(data_set,workstation, shades):
     
@@ -823,6 +820,8 @@ def save_graph(data_set,workstation, shades):
                 colors.append(shades[k])
 
     colors.append('#e8a42c')
+
+      
 
     pos = nx.drawing.nx_agraph.graphviz_layout(
             g,
@@ -844,7 +843,7 @@ save_graph(solution,workstations,node_colors)
 
 class ClockAndData:
     def __init__(self, canvas, canvas_1, x1, y1, time, current_production, workstations, subplot_dict_p,
-                 subplot_dict_q, subplot_dict_w, subplot_dict_wip, cycle_time, allocation, position, ax_graph, takt_time, 
+                 subplot_dict_q, subplot_dict_w, subplot_dict_wip, cycle_time, allocation, position, ax_graph, 
                 ct_achieved):
         self.canvas = canvas
         self.canvas_1 = canvas_1
@@ -861,7 +860,6 @@ class ClockAndData:
         self.allocation = allocation
         self.position = position
         self.ax_graph = ax_graph
-        self.takt_time = takt_time
         self.ct_achieved = ct_achieved
         canvas_1.create_text(self.x1+500, self.y1, font=("Arial Narrow",16, 'bold'), text= "SEW-MULATOR ENGINE by Optimalytics Business Solutions",anchor=tk.NW, fill='white')
         
@@ -873,10 +871,7 @@ class ClockAndData:
                                        text = "Simulation Time : " + str(get_simulation_time(round(time, 1))), anchor = tk.NW,fill='#6C3400')
         
         
-        self.canvas.delete(self.takt_time)
         x2_start = x1_start + 400
-        self.takt_time = canvas.create_text(x2_start, self.y1, font=("Arial Narrow",14,'bold'), 
-                                            text = "Desired Cycle Time : " + str(round(g.takt,2)), anchor = tk.NW,fill='#6C3400')
         
         self.canvas.delete(self.ct_achieved)
         x3_start = x2_start + 400
@@ -891,6 +886,7 @@ class ClockAndData:
         self.canvas.update()   
         
         # Capture the Production Related Data in the First Tab of Simulation Visualization
+        # Thu thập dữ liệu liên quan đến sản xuất trong tab mô phỏng đầu tiên 
         for i in range(self.workstations):
             sub_p = self.subplot_dict_p['a' + str(i)]
             sub_p.cla()
@@ -1082,7 +1078,6 @@ prec_f = plt.figure()
 prec_gs = GridSpec(1,1,figure=prec_f)
 prec_ax = plt.subplot(prec_gs.new_subplotspec((0,0)))
 prec_gs.update(left=0.02,right=0.98,top=0.9,bottom=0.1,wspace=0.2,hspace=0.01)
-prec_f.suptitle('Process Flow Diagram of '+ style_name, fontsize=20)
 prec_plot = FigureCanvasTkAgg(prec_f, master=main)
 prec_plot.get_tk_widget().config(width= main.winfo_screenwidth(),height = main.winfo_screenheight()*.5)
 prec_plot.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -1205,7 +1200,7 @@ data_plot_3.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     
     
 clock = ClockAndData(canvas, company_name, (main.winfo_screenwidth()*.05)/2, (main.winfo_screenheight()*.05)/2, 0, 0, solution_workstations, subplot_dict_p,
-                    subplot_dict_q, subplot_dict_w, subplot_dict_wip, cycle_time, allocation, position, ax_graph, takt_time, 0)
+                    subplot_dict_q, subplot_dict_w, subplot_dict_wip, cycle_time, allocation, position, ax_graph, 0)
 
 
 # In[ ]:

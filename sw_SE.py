@@ -779,7 +779,7 @@ class Assembly_Line:
         self.feasable_solution = feasable_solution
         self.Workstation = Workstation
         self.data = data
-        self.file = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:F')
+        self.file = pd.read_excel(file_path,sheet_name='hat1',skiprows=3,usecols='B:F')
         self.unique_task = self.file['Task Number'].tolist()
         self.followers = self.data.groupby(['Next Task'])['Task Number'].count().to_dict()
         
