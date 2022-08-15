@@ -943,7 +943,7 @@ class ClockAndData:
                 # print(waiting)
             except:
                 waiting = [0]
-            x_lab = list(map(str,process))      
+            x_lab = list(map(str,process))
             sub_p.bar(x_lab, waiting, color = '#0065A2')
             sub_p.set_title('W_%d' %(int(i)+1),fontsize=8)
             sub_p.set_ylim(ymin=0, ymax = self.cycle_time)

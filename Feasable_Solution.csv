@@ -9,8 +9,8 @@ S_2,START,,17,0.0,1,Yes,6
 S_5,START,,15,0.0,4,Yes,17
 11,Ráp đỉnh vào hông phối 2 bên,1 Kim,14,0.67,3,Yes,12
 17,Ráp Band trai + phải vào mặt,1 Kim,14,0.47,4,Yes,18
-12,Ráp hông vào phối lưới 2 bên,1 Kim,13,0.6,4,Yes,13
-18,Diễu band và mặt  ( 1 kim or 2 kim )x 2,1 Kim,13,0.6,5,Yes,19
+18,Diễu band và mặt  ( 1 kim or 2 kim )x 2,1 Kim,13,0.6,4,Yes,19
+12,Ráp hông vào phối lưới 2 bên,1 Kim,13,0.6,5,Yes,13
 S_1,START,,13,0.0,6,Yes,1
 13,Viền lật 2 kim chóp hông trên x 2,2 Kim (2.2),12,0.46,5,Yes,14
 1,Ráp gáy che vào vành,1 Kim,12,0.39,6,Yes,3
@@ -18,7 +18,7 @@ S_1,START,,13,0.0,6,Yes,1
 14,Viền lật 2 kim chóp  hông dưới x2,2 Kim (2.2),11,0.54,7,Yes,22
 20,Ráp band  vào đuôi nón,1 Kim,11,0.51,7,Yes,21
 3,Gắn nhãn PL3.2 vào vành,1 Kim,11,0.17,6,Yes,2
-2,Viền lật gáy che + vành,2 Kim (2.2),10,0.29,6,Yes,4
+2,Viền lật gáy che + vành,2 Kim (2.2),10,0.29,8,Yes,4
 21,Diễu đuôi nón 2 bên,1 Kim,10,0.24,8,Yes,23
 22,Gọt chóp để ráp,Phụ,10,0.24,8,Yes,23
 23,Tra band vào chóp,1 Kim,9,0.78,9,Yes,24
