@@ -3,7 +3,6 @@
 
 # In[1]:
 
-
 import pandas as pd
 import numpy as np
 import networkx as nx
@@ -33,9 +32,7 @@ warnings.filterwarnings("ignore")
 import time
 import mplcursors
 
-
 # In[2]:
-
 
 # Global Variables
 
@@ -110,7 +107,6 @@ def import_data(file_path):
 
 # In[4]:
 
-
 # Function to Create Precedence Graph and Create Precedence Graph for Visualizing the Line
 # Tạo đồ thị để hình dung
 
@@ -134,14 +130,12 @@ def precedence_graph(data_set):
     # plt.show()
     return g
 
-
 # In[5]:
 
 ##=======================================
 # Create Data Table for Line Balancing, Workstations And Allocation
 # Tạo dữ liệu cho cân bằng dòng, các trạm và phân bổ
 ##=======================================
-
 
 def create_LB_Table(data_set,g):
     line_balance = pd.DataFrame(columns=['Task Number','Number of Following Task'])
@@ -170,14 +164,12 @@ def create_LB_Table(data_set,g):
     final.loc[final['ST (Minutes)']==0,'Workstation'] = 1
     return final
 
-
 # In[6]:
 
 ##=======================================
 # Create Function for Workstation Allocation based on Largest Following Task Hueristic Algorithm
 # Tạo hàm phân bổ trạm máy bằng thuật toán Largest Following Task Hueristic
 ##=======================================
-
 
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
     
@@ -252,8 +244,6 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
                 allocation_table.iloc[i,4] = 0
                 count_station+=1
 
-            
-    
     #reassign the starting workstations from 1 to respective workstations
     # Phân bổ các máy trạm từ 1 đến máy trạm tương ứng
     reassign = allocation_table[allocation_table['Task Description'] == 'START']['Task Number'].tolist()
@@ -264,10 +254,7 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
         allocation_table.loc[allocation_table['Task Number'] == start,'Workstation'] = next_task_station
         
     return allocation_table                            
-
-
 # In[7]:
-
 
 # Generate Random Colors for Workstation Mapping
 # Tạo màu ngẫu nhiên cho máy trạm
