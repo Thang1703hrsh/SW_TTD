@@ -64,7 +64,7 @@ node_colors = node_colors['Hex'].to_dict()
 # Get Input Numbers for Line Balancing and Simulation
 # Lấy số liệu cân bằng và mô phỏng
 
-input_data = pd.read_excel(file_path, sheet_name='hat4',skiprows=3,usecols='B:F')
+input_data = pd.read_excel(file_path, sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G')
 cycle_time = max(input_data['ST (Minutes)'])
 workstations = (input_data['ST (Minutes)']).count()
 
@@ -74,7 +74,7 @@ workstations = (input_data['ST (Minutes)']).count()
 # Hàm cân bằng
 
 def import_data(file_path):
-    df = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:F')
+    df = pd.read_excel(file_path,sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G')
 
     # Manipulate the Line Details data to split multiple Predecessors to individual rows
     temp = pd.DataFrame(columns=['Task Number', 'Precedence'])
@@ -285,7 +285,7 @@ def rgb2hex(r,g,b):
 def generate_assembly_line(file_path, env, feasable_solution, Workstation, que, switch):
     
     workstation_data = dict(tuple(feasable_solution.groupby('Workstation')))
-    base = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:G')
+    base = pd.read_excel(file_path,sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G')
     
     assembly_line = []
     tasks = {}
@@ -739,7 +739,7 @@ class Assembly_Line:
         self.feasable_solution = feasable_solution
         self.Workstation = Workstation
         self.data = data
-        self.file = pd.read_excel(file_path,sheet_name='hat4',skiprows=3,usecols='B:F')
+        self.file = pd.read_excel(file_path,sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G')
         self.unique_task = self.file['Task Number'].tolist()
         self.followers = self.data.groupby(['Next Task'])['Task Number'].count().to_dict()
         
