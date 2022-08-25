@@ -33,38 +33,5 @@ warnings.filterwarnings("ignore")
 import time
 import mplcursors
 
-
-# In[2]:
-
-
-# Global Variables
-
-# Import the Line Details from Base File and Create Base Data
-# Nhập dữ liệu cơ sở và tạo dữ liệu cơ sở
-file_path = r'Line Balancing.xlsm'
-
-# For Capturing the Production During Simulation
-# Bắt giữ các sản phẩm trong quá trình mô phỏng
-throughput = 0
-
-# Que as Raw Material in Production
-# Que là nguyên liệu thô trong sản xuất
-Que = namedtuple('Que','RM_id, Task, Task_Time, End_Time, Next_Task')
-
-# List of All Global Variables
-# Danh sách các biến số toàn cầu
-production = globals()
-
-# Get Color List for Network
-# Lấy danh sách các màu cho mạng
-node_colors = pd.read_excel(file_path, sheet_name='Colors',usecols='A,C')
-node_colors = node_colors['Hex'].to_dict()
-
-
-# Get Input Numbers for Line Balancing and Simulation
-# Lấy số liệu cân bằng và mô phỏng
-
-input_data = pd.read_excel(file_path, sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G' , nrows = 7)
-cycle_time = max(input_data['ST (Minutes)'])
-workstations = (input_data['ST (Minutes)']).count()
-print(input_data)
+a = [1,2,3,4,5,6,7]
+print(a[-2])

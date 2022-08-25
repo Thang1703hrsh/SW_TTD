@@ -62,7 +62,7 @@ node_colors = node_colors['Hex'].to_dict()
 # Lấy số liệu cân bằng và mô phỏng
 
 input_data = pd.read_excel(file_path, sheet_name='cap_ultra_merge_2',skiprows=3,usecols='B:G')
-cycle_time = max(input_data['ST (Minutes)'])
+cycle_time = max(input_data['ST (Minutes)']/input_data['No of Operators'])
 workstations = (input_data['ST (Minutes)']).count()
 
 # In[3]:
@@ -168,7 +168,6 @@ def create_LB_Table(data_set,g):
 
 ##=======================================
 # Create Function for Workstation Allocation based on Largest Following Task Hueristic Algorithm
-# Tạo hàm phân bổ trạm máy bằng thuật toán Largest Following Task Hueristic
 ##=======================================
 
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
@@ -350,7 +349,6 @@ def generate_assembly_line(file_path, env, feasable_solution, Workstation, que, 
 
 
 # In[9]:
-
 
 # Generate Broad Cast Pipe for Track of Material Flow
 # Tạo đường ống để theo dõi
@@ -641,7 +639,6 @@ class Job:
 
 # In[13]:
 
-
 # Create Simulation Visualization of various metrics during simulation
 def plot_simulation(env, unique_tasks, feasable_solution):
     while True:
@@ -825,9 +822,9 @@ save_graph(solution,workstations,node_colors)
 
 # In[19]:
 
-
 # Class to Create Simulation Charts during intervals
 
+## Fix in here
 class ClockAndData:
     def __init__(self, canvas, canvas_1, x1, y1, time, current_production, workstations, subplot_dict_p,
                  subplot_dict_q, subplot_dict_w, subplot_dict_wip, cycle_time, allocation, position, ax_graph, 
