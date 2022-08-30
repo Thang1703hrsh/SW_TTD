@@ -62,7 +62,7 @@ node_colors = node_colors['Hex'].to_dict()
 # Get Input Numbers for Line Balancing and Simulation
 # Lấy số liệu cân bằng và mô phỏng
 
-input_data = pd.read_excel(file_path, sheet_name='Sheet3',skiprows=3,usecols='B:G')
+input_data = pd.read_excel(file_path, sheet_name='cap_ultra',skiprows=3,usecols='B:G')
 cycle_time = max(input_data['ST (Minutes)']/input_data['No of Operators'])
 workstations = (input_data['ST (Minutes)']).count()
 
@@ -72,17 +72,20 @@ workstations = (input_data['ST (Minutes)']).count()
 # Hàm cân bằng
 
 def import_data(file_path):
-    df = pd.read_excel(file_path,sheet_name='Sheet3',skiprows=3,usecols='B:G')
+    df = pd.read_excel(file_path,sheet_name='cap_ultra',skiprows=3,usecols='B:G')
 
-    # Manipulate the Line Details data to split multiple Predecessors to individual rows
+    # Manipulate the Line Details data to split multiple Predecessors to individual rows 
+    # Thao tác dữ liệu chi tiết đường dây để chia trước cho từng hàng 
+
     temp = pd.DataFrame(columns=['Task Number', 'Precedence'])
-
+    
     for i, d in df.iterrows():
         for j in str(d[3]).split(','):
             rows = pd.DataFrame({'Task Number':d[0], 'Precedence': [int(j)]})
             temp = temp.append(rows)
 
     temp = temp[['Precedence','Task Number']]
+    # print(temp) 
     temp.columns = ['Task Number','Next Task']
     temp['Task Number'] = temp['Task Number'].astype(int)
 
@@ -91,10 +94,9 @@ def import_data(file_path):
     temp = temp.append(last)
 
     # Create the Final Data for drawing precedence graph
-    # Tạo dữ liệu cuối cùng cho biểu đồ thứ bậc
     
-    final_df = temp.merge(df[['Task Number','Task Description','Resource','ST (Minutes)']],on='Task Number',how='left')
-    final_df = final_df[['Task Number','Task Description', 'Resource','ST (Minutes)','Next Task']]
+    final_df = temp.merge(df[['Task Number','Task Description','Resource','ST (Minutes)' , 'No of Operators']],on='Task Number',how='left')
+    final_df = final_df[['Task Number','Task Description', 'Resource','ST (Minutes)','Next Task' , 'No of Operators']]
     final_df['ST (Minutes)'] = final_df['ST (Minutes)'].fillna(0)
     final_df['Task Description'] = final_df['Task Description'].fillna('START')
 
@@ -103,6 +105,8 @@ def import_data(file_path):
         if d[0] == 0:
             final_df.iloc[i,d[0]] = 'S_%d' %counter
             counter+=1
+
+            
     return final_df
 
 
@@ -195,17 +199,19 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
             current_task = d[0] #Task hiện hành
             
             current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #
-
+            
             current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0]
             
             previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist()
-
+            # print(previous_task)
             previous_task_list = []
             
             previous_stations_list = []
             for pt in previous_task:
                 previous_task_list.append(allocation_table[allocation_table['Task Number']==pt].Allocated.tolist()[0])
                 previous_stations_list.append(allocation_table[allocation_table['Task Number']==pt].Workstation.tolist()[0])
+            
+            # print(previous_stations_list)
 
             count_allocations = sum(map(lambda x : x=='Yes',previous_task_list)) # Tính số lượng các task trước đó
             len_allocations = len(previous_task_list)
@@ -273,7 +279,7 @@ def rgb2hex(r,g,b):
 def generate_assembly_line(file_path, env, feasable_solution, Workstation, que, switch):
     
     workstation_data = dict(tuple(feasable_solution.groupby('Workstation')))
-    base = pd.read_excel(file_path,sheet_name='Sheet3',skiprows=3,usecols='B:G')
+    base = pd.read_excel(file_path,sheet_name='cap_ultra',skiprows=3,usecols='B:G')
     
     assembly_line = []
     tasks = {}
@@ -725,7 +731,7 @@ class Assembly_Line:
         self.feasable_solution = feasable_solution
         self.Workstation = Workstation
         self.data = data
-        self.file = pd.read_excel(file_path,sheet_name='Sheet3',skiprows=3,usecols='B:G')
+        self.file = pd.read_excel(file_path,sheet_name='cap_ultra',skiprows=3,usecols='B:G')
         self.unique_task = self.file['Task Number'].tolist()
         self.followers = self.data.groupby(['Next Task'])['Task Number'].count().to_dict()
         
@@ -753,9 +759,9 @@ class Assembly_Line:
 
 # Perform Line Balancing
 data = import_data(file_path)
+# print(data)
 graph = precedence_graph(data)
 Line_Balance = create_LB_Table(data,graph)
-
 Line_Balance.to_csv('Line_Balance.csv',index=False)
 solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations)
 # solution.to_csv('Feasable_Solution.csv',index=False , encoding="utf-8")

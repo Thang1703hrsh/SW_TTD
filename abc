@@ -1,0 +1,382 @@
+{
+    "S_3": {
+        "Task Number": "S_3",
+        "Task Description": "START",
+        "Resource": "",
+        "Number of Following Task": "18",
+        "ST (Minutes)": "0.0",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "13"
+    },
+    "13": {
+        "Task Number": "13",
+        "Task Description": "Ráp hông lưới vào hông phối ( 2 bên ) + Ráp lót đai ",
+        "Resource": "1 Kim",
+        "Number of Following Task": "17",
+        "ST (Minutes)": "0.0",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "15"
+    },
+    "S_4": {
+        "Task Number": "S_4",
+        "Task Description": "START",
+        "Resource": "",
+        "Number of Following Task": "16",
+        "ST (Minutes)": "0.0",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "17"
+    },
+    "17": {
+        "Task Number": "17",
+        "Task Description": "Ráp 6mm đỉnh nón",
+        "Resource": "1 Kim",
+        "Number of Following Task": "15",
+        "ST (Minutes)": "0.3",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "18"
+    },
+    "15": {
+        "Task Number": "15",
+        "Task Description": "Vắt sổ hông lưới và hông phối ( 2 bên )",
+        "Resource": "Vắt sổ",
+        "Number of Following Task": "15",
+        "ST (Minutes)": "0.13",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "16"
+    },
+    "S_2": {
+        "Task Number": "S_2",
+        "Task Description": "START",
+        "Resource": "",
+        "Number of Following Task": "15",
+        "ST (Minutes)": "0.0",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "8"
+    },
+    "S_1": {
+        "Task Number": "S_1",
+        "Task Description": "START",
+        "Resource": "",
+        "Number of Following Task": "15",
+        "ST (Minutes)": "0.0",
+        "Workstation": "2",
+        "Allocated": "Yes",
+        "Next Task": "1"
+    },
+    "1": {
+        "Task Number": "1",
+        "Task Description": "May cọng cước vào vành ( Cọng cước cắt đôi ở điểm giữa vành )",
+        "Resource": "Ziczac",
+        "Number of Following Task": "14",
+        "ST (Minutes)": "0.57",
+        "Workstation": "2",
+        "Allocated": "Yes",
+        "Next Task": "2"
+    },
+    "8": {
+        "Task Number": "8",
+        "Task Description": "Ráp 5mm con đĩa",
+        "Resource": "1 Kim",
+        "Number of Following Task": "14",
+        "ST (Minutes)": "0.28",
+        "Workstation": "1",
+        "Allocated": "Yes",
+        "Next Task": "9"
+    },
+    "18": {
+        "Task Number": "18",
+        "Task Description": "Viền 2 kim đỉnh nón ( Viền 2 kim thường)",
+        "Resource": "2 Kim",
+        "Number of Following Task": "14",
+        "ST (Minutes)": "0.24",
+        "Workstation": "2",
+        "Allocated": "Yes",
+        "Next Task": "19"
+    },
+    "16": {
+        "Task Number": "16",
+        "Task Description": "Diễu 1.5 mm hông phối",
+        "Resource": "1 Kim",
+        "Number of Following Task": "14",
+        "ST (Minutes)": "0.09",
+        "Workstation": "2",
+        "Allocated": "Yes",
+        "Next Task": "19"
+    },
+    "19": {
+        "Task Number": "19",
+        "Task Description": "Ráp hông phối và hông vào đỉnh ( 2 bên )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "13",
+        "ST (Minutes)": "0.67",
+        "Workstation": "3",
+        "Allocated": "Yes",
+        "Next Task": "20"
+    },
+    "2": {
+        "Task Number": "2",
+        "Task Description": "Bọc đầu cọng cước ở giưã vành bằng keo HQ ( Bọc hai lớp keo ) + Bọc hai đầu cọng cước ở ngoài vành bằng vải kate hoặc vải chính",
+        "Resource": "1 Kim",
+        "Number of Following Task": "13",
+        "ST (Minutes)": "0.61",
+        "Workstation": "3",
+        "Allocated": "Yes",
+        "Next Task": "3"
+    },
+    "9": {
+        "Task Number": "9",
+        "Task Description": "May chặn đầu dây khoá + May chặn con đĩa vào khóa",
+        "Resource": "1 Kim",
+        "Number of Following Task": "13",
+        "ST (Minutes)": "0.39",
+        "Workstation": "4",
+        "Allocated": "Yes",
+        "Next Task": "10"
+    },
+    "20": {
+        "Task Number": "20",
+        "Task Description": "Diễu viền 2 kim 5mm đỉnh và hông phối ( 2 bên-viền diễu phần đỉnh )",
+        "Resource": "2 Kim",
+        "Number of Following Task": "12",
+        "ST (Minutes)": "0.59",
+        "Workstation": "4",
+        "Allocated": "Yes",
+        "Next Task": "21"
+    },
+    "3": {
+        "Task Number": "3",
+        "Task Description": "Ráp gáy che vào vành",
+        "Resource": "1 Kim",
+        "Number of Following Task": "12",
+        "ST (Minutes)": "0.48",
+        "Workstation": "5",
+        "Allocated": "Yes",
+        "Next Task": "4"
+    },
+    "10": {
+        "Task Number": "10",
+        "Task Description": "Gắn khoá vào đuôi nón( Bên ngắn TP = 1 cm , bên dài TP = 10 cm ) Phần dành xỏ khoá cắt 6 cm ráp nối 6-7 mm",
+        "Resource": "1 Kim",
+        "Number of Following Task": "12",
+        "ST (Minutes)": "0.39",
+        "Workstation": "5",
+        "Allocated": "Yes",
+        "Next Task": "11"
+    },
+    "11": {
+        "Task Number": "11",
+        "Task Description": "Ráp mặt vào hông nón ( Ráp theo dấu , chừa 1 lỗ 2.5cm ở giữa ) + Lược hông nón vào đuôi nón ( Lược theo dấu )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "11",
+        "ST (Minutes)": "1.19",
+        "Workstation": "6",
+        "Allocated": "Yes",
+        "Next Task": "12"
+    },
+    "21": {
+        "Task Number": "21",
+        "Task Description": "Ráp hông dưới vào hông trên ( 2 bên )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "11",
+        "ST (Minutes)": "0.78",
+        "Workstation": "7",
+        "Allocated": "Yes",
+        "Next Task": "22"
+    },
+    "4": {
+        "Task Number": "4",
+        "Task Description": "Viền diễu 2 kim 5mm gáy che và vành ( Dây viền 2.2 ép lưới và lót thêm 1 lớp keo\nHQ bên trong rộng 8-9 mm",
+        "Resource": "2 Kim",
+        "Number of Following Task": "11",
+        "ST (Minutes)": "0.38",
+        "Workstation": "5",
+        "Allocated": "Yes",
+        "Next Task": "5"
+    },
+    "12": {
+        "Task Number": "12",
+        "Task Description": "Diễu 2mm hai bên đường ráp mặt và hông nón ( Giống sun tripper) + Diễu gấp đầu 2mm hông nón ( Phần đuôi )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "10",
+        "ST (Minutes)": "1.27",
+        "Workstation": "8",
+        "Allocated": "Yes",
+        "Next Task": "23"
+    },
+    "5": {
+        "Task Number": "5",
+        "Task Description": "Bọc viền xung quanh vành",
+        "Resource": "Trụ bước ngang",
+        "Number of Following Task": "10",
+        "ST (Minutes)": "0.59",
+        "Workstation": "9",
+        "Allocated": "Yes",
+        "Next Task": "6"
+    },
+    "22": {
+        "Task Number": "22",
+        "Task Description": "Diễu viền 2 kim 5mm hông dưới ( 2 bên )",
+        "Resource": "2 Kim",
+        "Number of Following Task": "10",
+        "ST (Minutes)": "0.36",
+        "Workstation": "7",
+        "Allocated": "Yes",
+        "Next Task": "23"
+    },
+    "6": {
+        "Task Number": "6",
+        "Task Description": "May bọc viền vành",
+        "Resource": "1 Kim",
+        "Number of Following Task": "9",
+        "ST (Minutes)": "1.02",
+        "Workstation": "10",
+        "Allocated": "Yes",
+        "Next Task": "7"
+    },
+    "23": {
+        "Task Number": "23",
+        "Task Description": "Ráp thân dưới vào chóp nón\n( Ráp 6mm điểm xỏ trùng với điểm giưã hai kim của hông nón )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "9",
+        "ST (Minutes)": "0.95",
+        "Workstation": "11",
+        "Allocated": "Yes",
+        "Next Task": "24"
+    },
+    "24": {
+        "Task Number": "24",
+        "Task Description": "May dây size felt vào nón",
+        "Resource": "1 Kim",
+        "Number of Following Task": "8",
+        "ST (Minutes)": "1.38",
+        "Workstation": "12",
+        "Allocated": "Yes",
+        "Next Task": "25"
+    },
+    "7": {
+        "Task Number": "7",
+        "Task Description": "Lược nhãn vào gáy che",
+        "Resource": "1 Kim",
+        "Number of Following Task": "8",
+        "ST (Minutes)": "0.18",
+        "Workstation": "10",
+        "Allocated": "Yes",
+        "Next Task": "25"
+    },
+    "25": {
+        "Task Number": "25",
+        "Task Description": "Tra chóp vào vành",
+        "Resource": "1 Kim",
+        "Number of Following Task": "7",
+        "ST (Minutes)": "0.95",
+        "Workstation": "13",
+        "Allocated": "Yes",
+        "Next Task": "26"
+    },
+    "26": {
+        "Task Number": "26",
+        "Task Description": "Đính dây quai vào vành",
+        "Resource": "Trụ bước đứng",
+        "Number of Following Task": "6",
+        "ST (Minutes)": "0.3",
+        "Workstation": "13",
+        "Allocated": "Yes",
+        "Next Task": "27"
+    },
+    "14": {
+        "Task Number": "14",
+        "Task Description": "Viền 2 kim lót đai",
+        "Resource": "2 Kim",
+        "Number of Following Task": "6",
+        "ST (Minutes)": "0.09",
+        "Workstation": "14",
+        "Allocated": "Yes",
+        "Next Task": "27"
+    },
+    "27": {
+        "Task Number": "27",
+        "Task Description": "Tra lót chóp vào vành",
+        "Resource": "Trụ bước đứng",
+        "Number of Following Task": "5",
+        "ST (Minutes)": "1.3",
+        "Workstation": "15",
+        "Allocated": "Yes",
+        "Next Task": "28"
+    },
+    "S_5": {
+        "Task Number": "S_5",
+        "Task Description": "START",
+        "Resource": "",
+        "Number of Following Task": "5",
+        "ST (Minutes)": "0.0",
+        "Workstation": "17",
+        "Allocated": "Yes",
+        "Next Task": "29"
+    },
+    "28": {
+        "Task Number": "28",
+        "Task Description": "Ráp lược lót chóp vào chóp ( lược phần trên )",
+        "Resource": "1 Kim",
+        "Number of Following Task": "4",
+        "ST (Minutes)": "1.43",
+        "Workstation": "16",
+        "Allocated": "Yes",
+        "Next Task": "30"
+    },
+    "29": {
+        "Task Number": "29",
+        "Task Description": "Lược nhiều cái nhãn dính lại với nhau",
+        "Resource": "1 Kim",
+        "Number of Following Task": "4",
+        "ST (Minutes)": "0.82",
+        "Workstation": "17",
+        "Allocated": "Yes",
+        "Next Task": "30"
+    },
+    "30": {
+        "Task Number": "30",
+        "Task Description": "Lược nhãn vào giữa đường 2 kim chóp",
+        "Resource": "1 Kim",
+        "Number of Following Task": "3",
+        "ST (Minutes)": "0.18",
+        "Workstation": "17",
+        "Allocated": "Yes",
+        "Next Task": "31"
+    },
+    "31": {
+        "Task Number": "31",
+        "Task Description": "Diễu 1.5mm xung quanh chân nón",
+        "Resource": "Trụ bước đứng",
+        "Number of Following Task": "2",
+        "ST (Minutes)": "0.93",
+        "Workstation": "18",
+        "Allocated": "Yes",
+        "Next Task": "32"
+    },
+    "32": {
+        "Task Number": "32",
+        "Task Description": "Diễu viền 2 kim 5mm thân xung quanh chóp",
+        "Resource": "2 Kim",
+        "Number of Following Task": "1",
+        "ST (Minutes)": "1.28",
+        "Workstation": "19",
+        "Allocated": "Yes",
+        "Next Task": "33"
+    },
+    "33": {
+        "Task Number": "33",
+        "Task Description": "May Ziczac chặn 4 điểm ở các bên xỏ lỗ ( tham khảo mẫu ) (máy lập trình khuy-bọ)",
+        "Resource": "Ziczac (Lập trình)",
+        "Number of Following Task": "0",
+        "ST (Minutes)": "0.84",
+        "Workstation": "20",
+        "Allocated": "Yes",
+        "Next Task": "END"
+    }
+}

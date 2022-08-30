@@ -1,37 +1,38 @@
-#!/usr/bin/env python
-# coding: utf-8
+import csv
+import json
+ 
+def csv_to_json(csv_file_path, json_file_path):
+    #create a dictionary
+    data_dict = {}
+ 
+    #Step 2
+    #open a csv file handler
+    with open(csv_file_path, encoding = 'utf-8') as csv_file_handler:
+        csv_reader = csv.DictReader(csv_file_handler)
+ 
+        #convert each row into a dictionary
+        #and add the converted data to the data_variable
+ 
+        for rows in csv_reader:
+ 
+            #assuming a column named 'No'
+            #to be the primary key
+            key = rows['Task Number']
+            data_dict[key] = rows
+ 
+    #open a json file handler and use json.dumps
+    #method to dump the data
+    #Step 3
+    with open(json_file_path, 'w', encoding = 'utf-8') as json_file_handler:
+        #Step 4
+        json_file_handler.write(json.dumps(data_dict, indent = 4 ,  ensure_ascii=False))
 
-# In[1]:
-
-
-import pandas as pd
-import numpy as np
-import networkx as nx
-import matplotlib.pyplot as plt
-import graphviz
-import pygraphviz
-import math
-import simpy
-import random
-from collections import namedtuple
-from contextlib import ExitStack
-from numpy import inf
-import itertools
-
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import matplotlib
-# get_ipython().run_line_magic('matplotlib', 'inline')
-from matplotlib.gridspec import GridSpec
-matplotlib.pyplot.style.use('seaborn-darkgrid')
-import tkinter as tk
-from tkinter import ttk
-import datetime
-from datetime import timedelta as td
-from datetime import time as dtt
-import warnings
-warnings.filterwarnings("ignore")
-import time
-import mplcursors
-
-a = [1,2,3,4,5,6,7]
-print(a[-2])
+#driver code
+#be careful while providing the path of the csv file
+#provide the file path relative to your machine
+ 
+#Step 1
+csv_file_path = 'Feasable_Solution.csv'
+json_file_path = 'abc'
+ 
+csv_to_json(csv_file_path, json_file_path)
