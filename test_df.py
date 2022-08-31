@@ -101,8 +101,8 @@ def import_data(file_path):
     final_df['ST (Minutes)'] = final_df['ST (Minutes)'].fillna(0)
     final_df['Preparation Stage'] = final_df['Preparation Stage'].fillna(1)
     final_df['Task Description'] = final_df['Task Description'].fillna('START')
-    final_df['Next Task'] = final_df['Next Task'].loc[0:(final_df.shape[0]-2)].astype(int)
-    final_df['Task Number'] = final_df['Task Number'].loc[0:(final_df.shape[0]-1)].astype(int)
+    # final_df['Next Task'] = final_df['Next Task'].loc[0:(final_df.shape[0]-1)].astype(int)
+    # final_df['Task Number'] = final_df['Task Number'].loc[0:(final_df.shape[0]-1)].astype(int)
 
     # final_df = final_df.append(last)
 
@@ -111,22 +111,45 @@ def import_data(file_path):
     #     if d[0] == 0:
     #         final_df.iloc[i,d[0]] = 'S_%d' %counter
     #         counter+=1
-
+    # final_df = final_df.sort_values(by=['Task Number'])
     for i, d in final_df.iterrows():
         if d[6] == 0:
             for j , k in final_df.iterrows():
-                if (k[4] == d[0]):
-                    print(k[4])
+                if d[0] == k[4]:
                     # final_df = final_df.replace(k[4] , d[4])
-                    final_df.iloc[j,k[4]] = d[4]
-            # final_df = final_df.drop(i, axis=0, inplace=False)
+                    final_df['Next Task'].loc[j] = d[4]
+    for i, d in final_df.iterrows():
+        if d[6] == 0:
+            for j , k in final_df.iterrows():
+                if d[0] == k[4]:
+                    # final_df = final_df.replace(k[4] , d[4])
+                    final_df['Next Task'].loc[j] = d[4]
+            final_df = final_df.drop(i, axis=0, inplace=False)
+    final_df.reset_index(inplace = True , drop = True)
 
-    print(final_df.info())
+    # final_df['Task Number'] = final_df['Task Number'].astype(object)
+    # print(final_df.info())
+    counter = 1
+    for i, d in final_df.iterrows():
+        if d[0] == 0:
+            final_df['Task Number'].loc[i] = 'S_%d' %counter
+            counter+=1
     return final_df
 
 
 data = import_data(file_path)
 
+dups_color = data.pivot_table(columns=['Resource'], aggfunc='size')
+print (dups_color)
+
+
+# count_1k = data['Resource'].count()
+
+# count_2k =
+# count_vs = 
+# count_tbd =
+# count_tbn = 
+# count_zz = 
 # df = pd.read_excel(file_path,sheet_name='cap_ultra_test',skiprows=3,usecols='B:H')
 # for i, d in df.iterrows():
 #     print(df.iloc[i,3])

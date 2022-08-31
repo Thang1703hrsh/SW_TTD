@@ -121,6 +121,7 @@ def import_data(file_path):
         if d[0] == 0:
             final_df.iloc[i,d[0]] = 'S_%d' %counter
             counter+=1
+
     return final_df
 
 
@@ -192,7 +193,6 @@ def create_LB_Table(data_set,g):
 ##=======================================
 
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
-    
     
     counter = [0] * workstations
     
@@ -458,7 +458,7 @@ class Workstation:
                         siblings.append(nd)
                         prev_nodes.append(nd)
                     nxt_proc_nodes[node] = prev_nodes
-
+                    
                 node_siblings = list(set(siblings))
                 
                 start_proc = self.previous_process[task][0]
@@ -777,12 +777,8 @@ class Assembly_Line:
 
 # Perform Line Balancing
 data = import_data(file_path)
-print(data)
-print("===============================")
 graph = precedence_graph(data)
 Line_Balance = create_LB_Table(data,graph)
-print(Line_Balance)
-print("===============================")
 
 Line_Balance.to_csv('Line_Balance.csv',index=False)
 solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations)
@@ -1233,7 +1229,7 @@ clock = ClockAndData(canvas, company_name, (main.winfo_screenwidth()*.05)/2, (ma
 
 
 # Start Assembly Line Simulation
-# line = Assembly_Line(file_path, solution, Workstation, data)
-# line.run()
-# main.mainloop()
+line = Assembly_Line(file_path, solution, Workstation, data)
+line.run()
+main.mainloop()
 
