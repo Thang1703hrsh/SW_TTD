@@ -191,20 +191,28 @@ def create_LB_Table(data_set,g):
 
 ##=======================================
 
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
-    
     
     counter = [0] * workstations
     
     current_station = 1
     
     stations = {}
-    
+
     for i in range(1,workstations + 1):
         stations[i] = 'open'
     
     count_station = 0
     max_station = 10
+
+
 
     # print('Enter your max workstation:')
     # max_station = int(input())
@@ -1233,7 +1241,7 @@ clock = ClockAndData(canvas, company_name, (main.winfo_screenwidth()*.05)/2, (ma
 
 
 # Start Assembly Line Simulation
-# line = Assembly_Line(file_path, solution, Workstation, data)
-# line.run()
-# main.mainloop()
+line = Assembly_Line(file_path, solution, Workstation, data)
+line.run()
+main.mainloop()
 
