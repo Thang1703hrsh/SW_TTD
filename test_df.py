@@ -140,10 +140,17 @@ def import_data(file_path):
 data = import_data(file_path)
 
 dups_color = data.pivot_table(columns=['Resource'], aggfunc='size')
-print (dups_color)
+dups_color.value_counts
+
+count_1k = dups_color[dups_color.index == '1 Kim'].values
+count_2k = dups_color[dups_color.index == '2 Kim'].values
+count_tbn = dups_color[dups_color.index == 'Trụ bước ngang'].values
+count_tbd = dups_color[dups_color.index == 'Trụ bước đứng'].values
+count_vs = dups_color[dups_color.index == 'Vắt sổ'].values
+count_zz = dups_color[dups_color.index == 'Ziczac'].values
+count_lt = dups_color[dups_color.index == 'Lập trình'].values
 
 
-# count_1k = data['Resource'].count()
 
 # count_2k =
 # count_vs = 

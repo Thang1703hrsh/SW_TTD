@@ -115,6 +115,13 @@ def import_data(file_path):
                     final_df['Next Task'].loc[j] = d[4]
             final_df = final_df.drop(i, axis=0, inplace=False)
     final_df.reset_index(inplace = True , drop = True)
+    
+    for i, d in final_df.iterrows():
+        if d[1] == 'START':
+            for j , k in final_df.iterrows():
+                if (d[4] == k[4]) & (i != j):
+                    final_df = final_df.drop(i, axis=0, inplace=False)
+    final_df.reset_index(inplace = True , drop = True)
 
     counter = 1
     for i, d in final_df.iterrows():
@@ -191,20 +198,28 @@ def create_LB_Table(data_set,g):
 
 ##=======================================
 
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
-    
     
     counter = [0] * workstations
     
     current_station = 1
     
     stations = {}
-    
+
     for i in range(1,workstations + 1):
         stations[i] = 'open'
     
     count_station = 0
-    max_station = 10
+    max_station = 3
+
+
 
     # print('Enter your max workstation:')
     # max_station = int(input())
@@ -786,6 +801,9 @@ print("===============================")
 
 Line_Balance.to_csv('Line_Balance.csv',index=False)
 solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations)
+print(solution)
+print("===============================")
+
 # solution.to_csv('Feasable_Solution.csv',index=False , encoding="utf-8")
 solution.to_json("thejson.json", orient='index')
 solution_workstations = max(solution['Workstation'].tolist())
@@ -1233,7 +1251,7 @@ clock = ClockAndData(canvas, company_name, (main.winfo_screenwidth()*.05)/2, (ma
 
 
 # Start Assembly Line Simulation
-# line = Assembly_Line(file_path, solution, Workstation, data)
-# line.run()
-# main.mainloop()
+line = Assembly_Line(file_path, solution, Workstation, data)
+line.run()
+main.mainloop()
 

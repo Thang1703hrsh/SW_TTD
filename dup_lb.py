@@ -116,11 +116,19 @@ def import_data(file_path):
             final_df = final_df.drop(i, axis=0, inplace=False)
     final_df.reset_index(inplace = True , drop = True)
 
+    for i, d in final_df.iterrows():
+        if d[1] == 'START':
+            for j , k in final_df.iterrows():
+                if (d[4] == k[4]) & (i != j):
+                    final_df = final_df.drop(i, axis=0, inplace=False)
+    final_df.reset_index(inplace = True , drop = True)
+
     counter = 1
     for i, d in final_df.iterrows():
         if d[0] == 0:
             final_df.iloc[i,d[0]] = 'S_%d' %counter
             counter+=1
+    print(final_df)
 
     return final_df
 
@@ -192,11 +200,33 @@ def create_LB_Table(data_set,g):
 
 ##=======================================
 
+
+
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+
+
 def find_feasable_allocation(base_data, allocation_table, cycle_time, workstations):
     
-    counter = [0] * workstations
+    ## Tạo dữ liệu loại kim và số lượng các kim
+    dups_color = data.pivot_table(columns=['Resource'], aggfunc='size')
+    dups_color.value_counts
+
+    count_1k = dups_color[dups_color.index == '1 Kim'].values
+    count_2k = dups_color[dups_color.index == '2 Kim'].values
+    count_tbn = dups_color[dups_color.index == 'Trụ bước ngang'].values
+    count_tbd = dups_color[dups_color.index == 'Trụ bước đứng'].values
+    count_vs = dups_color[dups_color.index == 'Vắt sổ'].values
+    count_zz = dups_color[dups_color.index == 'Ziczac'].values
+    count_lt = dups_color[dups_color.index == 'Lập trình'].values
+
+    counter = [0] * workstations # Danh sách chứa thời gian của mỗi trạm ban đầu
     
-    current_station = 1
+    current_station = 1 # Xét station hiện tại là 1
     
     stations = {}
     
@@ -213,24 +243,25 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
     for i, d in allocation_table.iterrows():
         if d[1] != 'START':
             
-            current_task = d[0] #Task hiện hành
+            current_task = d[0] #Task num hiện hành
             
-            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] #
-
-            current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0]
+            current_task_allocated = allocation_table[allocation_table['Task Number']==d[0]].Allocated.tolist()[0] # Tất cả đều No
             
-            previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist()
+            current_task_time = base_data[base_data['Task Number']==d[0]]['ST (Minutes)'].tolist()[0] # Thời gian của các task đang No
+            
+            previous_task = base_data[base_data['Next Task']== d[0]]['Task Number'].tolist() # Danh sách các task trước đó 
 
             previous_task_list = []
             
             previous_stations_list = []
+            
             for pt in previous_task:
                 previous_task_list.append(allocation_table[allocation_table['Task Number']==pt].Allocated.tolist()[0])
                 previous_stations_list.append(allocation_table[allocation_table['Task Number']==pt].Workstation.tolist()[0])
-
+            
             count_allocations = sum(map(lambda x : x=='Yes',previous_task_list)) # Tính số lượng các task trước đó
             len_allocations = len(previous_task_list)
-
+            
             if count_allocations == len_allocations:
                 previous_task_allocated = 'Yes'
             else:
@@ -238,15 +269,22 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
 
             station_cut_off = max(previous_stations_list)
 
+            ## previous_task_allocated: Phân bổ các task trước đó: Yes/No
+            ## current_task_allocated: Phân bổ các task hiện hành: Yes/No
+            ## current_task_time: Thời gian của task hiện tại
+            ## allocation_table: Bảng dữ liệu phân bổ
+            ## Gom cụm các loại máy lại với nhau 
+
+            ## Nếu task trước đó Yes, Task hiện hành No và thời gian task hiện hành thỏa mãn, số lượng task trong trạm < max
             if (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[station_cut_off-1])) & (count_station < max_station):
-                allocation_table.iloc[i,6] = 'Yes'
-                allocation_table.iloc[i,5] = station_cut_off
-                counter[station_cut_off-1]+=current_task_time
-                count_station += 1
+                allocation_table.iloc[i,6] = 'Yes' # Cập nhật thành Yes
+                allocation_table.iloc[i,5] = station_cut_off # Cập nhật số trạm cho task
+                counter[station_cut_off-1]+=current_task_time # Cập nhật array chưa giá trị 
+                count_station += 1 # Tính số lượng trạm
 
             elif (previous_task_allocated == 'Yes') & (current_task_allocated == 'No') & (current_task_time <= (cycle_time - counter[current_station-1])) & (count_station < max_station):
-                allocation_table.iloc[i,6] = 'Yes'
-                allocation_table.iloc[i,5] = current_station
+                allocation_table.iloc[i,6] = 'Yes' # Cập nhật thành Yes
+                allocation_table.iloc[i,5] = current_station # Cập nhật số trạm cho task dựa và
                 counter[current_station-1]+=current_task_time  
                 count_station += 1  
                 
@@ -776,13 +814,22 @@ class Assembly_Line:
 
 
 # Perform Line Balancing
-data = import_data(file_path)
-graph = precedence_graph(data)
-Line_Balance = create_LB_Table(data,graph)
 
-Line_Balance.to_csv('Line_Balance.csv',index=False)
-solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations)
-# solution.to_csv('Feasable_Solution.csv',index=False , encoding="utf-8")
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+##########################################################
+
+data = import_data(file_path) # Đọc và chuẩn hóa dữ liệu
+graph = precedence_graph(data) # tạo đồ thị thứ tự 
+Line_Balance = create_LB_Table(data,graph) # Tạo dữ liệu chứa số thứ tự tuần tự các task
+
+Line_Balance.to_csv('Line_Balance.csv',index=False) 
+solution = find_feasable_allocation(data,Line_Balance,cycle_time,workstations) # Sắp xếp các task 
+solution.to_csv('Feasable_Solution.csv',index=False , encoding="utf-8")
 solution.to_json("thejson.json", orient='index')
 solution_workstations = max(solution['Workstation'].tolist())
 
