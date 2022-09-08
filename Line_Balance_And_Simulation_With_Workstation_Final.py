@@ -221,6 +221,8 @@ def find_feasable_allocation(base_data, allocation_table, cycle_time, workstatio
 
 
 
+
+
     # print('Enter your max workstation:')
     # max_station = int(input())
 
